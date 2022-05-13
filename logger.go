@@ -11,7 +11,7 @@ type aggregatedLogger struct {
 	errorLogger *log.Logger
 }
 
-var logger aggregatedLogger
+var al aggregatedLogger
 
 func init() {
 	flags := log.LstdFlags | log.Lshortfile
@@ -20,25 +20,21 @@ func init() {
 	warnLogger := log.New(os.Stdout, "[WARN] ", flags)
 	errorLogger := log.New(os.Stdout, "[ERR] ", flags)
 
-	logger = aggregatedLogger{
+	al = aggregatedLogger{
 		infoLogger:  infoLogger,
 		warnLogger:  warnLogger,
 		errorLogger: errorLogger,
 	}
 }
 
-func (l aggregatedLogger) Info(v ...interface{}) {
-	l.infoLogger.Println(v...)
+func Info(v ...interface{}) {
+	al.infoLogger.Println(v...)
 }
 
-func (l aggregatedLogger) Warn(v ...interface{}) {
-	l.warnLogger.Println(v...)
+func Warn(v ...interface{}) {
+	al.warnLogger.Println(v...)
 }
 
-func (l aggregatedLogger) Error(v ...interface{}) {
-	l.errorLogger.Println(v...)
-}
-
-func GetLogger() aggregatedLogger {
-	return logger
+func Error(v ...interface{}) {
+	al.errorLogger.Println(v...)
 }
