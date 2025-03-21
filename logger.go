@@ -9,6 +9,7 @@ type aggregatedLogger struct {
 	infoLogger  *log.Logger
 	warnLogger  *log.Logger
 	errorLogger *log.Logger
+	fatalLogger *log.Logger
 }
 
 var al aggregatedLogger
@@ -18,12 +19,14 @@ func init() {
 
 	infoLogger := log.New(os.Stdout, "[INFO] ", flags)
 	warnLogger := log.New(os.Stdout, "[WARN] ", flags)
-	errorLogger := log.New(os.Stdout, "[ERR] ", flags)
+	errorLogger := log.New(os.Stdout, "[ERROR] ", flags)
+	fatalLogger := log.New(os.Stdout, "[FATAL] ", flags)
 
 	al = aggregatedLogger{
 		infoLogger:  infoLogger,
 		warnLogger:  warnLogger,
 		errorLogger: errorLogger,
+		fatalLogger: fatalLogger,
 	}
 }
 
@@ -49,4 +52,12 @@ func Error(v ...interface{}) {
 
 func Errorf(format string, v ...interface{}) {
 	al.errorLogger.Printf(format+"\n", v...)
+}
+
+func Fatal(v ...interface{}) {
+	al.fatalLogger.Fatalln(v...)
+}
+
+func Fatalf(format string, v ...interface{}) {
+	al.fatalLogger.Fatalf(format+"\n", v...)
 }
